@@ -25,6 +25,16 @@ List* create_begin(int this_value){
 }
 
 void Add(List* my_list, int my_value){
+    if (my_list -> len == 0){
+        field_List *my_field_begin = new field_List();
+        my_field_begin -> value = my_value;
+        my_field_begin -> next = nullptr;
+
+        my_list -> field_begin = my_field_begin;
+        my_list -> field_end = my_field_begin;
+        my_list -> len = 1;
+        return;
+    }
     field_List *new_field_end = new field_List();
     new_field_end -> value = my_value;
     my_list -> field_end -> next = new_field_end;
@@ -174,6 +184,14 @@ void del_i(List* my_list, int i){
     my_list -> len--;
 }
 
+List* create_empty(){
+    List *o_List = new List();
+    o_List -> field_begin = nullptr;
+    o_List -> field_end = nullptr;
+    o_List -> len = 0;
+    return o_List;
+}
+
 int main(){
     setlocale(LC_ALL,"Russian");
 
@@ -183,6 +201,9 @@ int main(){
     for (int i = 1; i < 5; i++){
         Add(masiv,zn_mas[i]);
     }
+    List* emp = create_empty();
+    Add(emp, 130);
+    print_list(emp);
 
     remove_my(masiv, 1);
     remove_my(masiv, 3);
