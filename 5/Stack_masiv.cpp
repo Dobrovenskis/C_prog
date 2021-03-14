@@ -17,15 +17,15 @@ Stack_masiv* create_empty_stack_masiv(){
 }
 
 void push_in_strack_masiv(Stack_masiv *this_stack, int value){
-    int* arr = my_slightly_dumb_reallocation(this_stack -> masiv, this_stack -> length, ++(this_stack -> length));
-    this_stack -> length = this_stack -> length ++;
+    int* arr = my_slightly_dumb_reallocation(this_stack -> masiv, this_stack -> length, (this_stack -> length) + 1);
+    this_stack -> length = this_stack -> length + 1;
     arr[this_stack -> length - 1] = value;
     this_stack -> masiv = arr;
 }
 
 void pop_stack_masiv_element(Stack_masiv *this_stack){
-    int* arr = my_slightly_dumb_reallocation(this_stack -> masiv, this_stack -> length, this_stack -> length --);
-    this_stack -> length = this_stack -> length --;
+    int* arr = my_slightly_dumb_reallocation(this_stack -> masiv, this_stack -> length, this_stack -> length -1);
+    this_stack -> length = this_stack -> length - 1;
     this_stack -> masiv = arr;
 }
 
@@ -34,7 +34,7 @@ void print_stack_masiv(Stack_masiv *this_stack){
 		std::cout << (this_stack -> masiv)[i];
      std::cout << std::endl;
 }
-
+/*
 int main(){
     Stack_masiv* st = create_empty_stack_masiv();
     push_in_strack_masiv(st, 0);
@@ -46,3 +46,4 @@ int main(){
     pop_stack_masiv_element(st);
     print_stack_masiv(st);
 }
+*/

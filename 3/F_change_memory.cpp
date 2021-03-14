@@ -1,11 +1,12 @@
-/* #include <iostream>
-using std::cin;
+ #include <iostream>
+/* using std::cin;
 using std::cout;
 using std::endl  */
 
-int* my_slightly_dumb_reallocation(int* source, unsigned int n_old, unsigned int n_new){
+int* my_slightly_dumb_reallocation(int* source, int n_old, int n_new){
     int *arr;
     if (n_new == 0){
+        //std::cout << "N_new = 0";
         delete[] source;
         return NULL;
 }
@@ -15,6 +16,7 @@ int* my_slightly_dumb_reallocation(int* source, unsigned int n_old, unsigned int
             for (int i = 0; i < n_old; i++){
                 arr[i] = source[i];
             }
+
         }
         else{
             for (int i = 0; i < n_new; i++){
