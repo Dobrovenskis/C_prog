@@ -184,6 +184,17 @@ void del_i(List* my_list, int i){
     my_list -> len--;
 }
 
+void del_list(List* my_list){
+    field_List* field;
+    field_List* field_new;
+    field = my_list -> field_begin;
+    for (int k = 0; k < my_list -> len - 1; k++){
+        field_new = field -> next;
+        delete[] field;
+        field = field_new;
+    }
+}
+
 List* create_empty(){
     List *o_List = new List();
     o_List -> field_begin = nullptr;
@@ -191,7 +202,7 @@ List* create_empty(){
     o_List -> len = 0;
     return o_List;
 }
-
+/*
 int main(){
     setlocale(LC_ALL,"Russian");
 
@@ -226,4 +237,4 @@ int main(){
 
     del_i(masiv, 3);
     print_list(masiv);
-}
+}*/

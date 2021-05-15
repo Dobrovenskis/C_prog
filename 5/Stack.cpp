@@ -27,7 +27,7 @@ void pop(Stack* my_stack){
     del_i(my_stack -> my_list,  my_stack -> my_list -> len - 1);
 }
 
-int main(){
+/*int main(){
     Stack* st = create_empty_stack();
     push(st, 0);
     push(st, 1);
@@ -37,4 +37,4 @@ int main(){
     print_stack(st);
     pop(st);
     print_stack(st);
-}
+}*/
