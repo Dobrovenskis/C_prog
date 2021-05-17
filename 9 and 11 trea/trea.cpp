@@ -293,14 +293,264 @@ void Delete_value( Tre* tree,int val)
     delete[] del;
 }
 
+void find_all_leaves(Node* n)
+{
+    if (n->left == nullptr && n->right == nullptr)
+    {
+        std::cout << n -> value << " ";
+    }
+
+
+   if (n->right != nullptr)
+   {
+       find_all_leaves(n->right);
+   }
+   if (n->left != nullptr)
+   {
+       find_all_leaves(n->left);
+   }
+}
+
 int count_height(Tre* tre)
 {
     return tre->begin_node->height;
 }
 
-void r_rotation(Tre* tre, Node* versh)
+void fix_height( Node* n)
 {
+    if (n->left == nullptr || n->right == nullptr)
+    {
+        n->height = 1;
+        return;
+    }
+    int h_left = n->left->height;
+    int h_right = n->right->height;
+    if (h_left > h_right)
+    {
+        n ->height = h_left+1;
+    }
+    else
+    {
+        n->height = h_right+1;
+    }
+}
+void r_rotation(Node* a)
+{
+    /*
+        a              b
+       / \            / \
+      b   R   ->     L   a
+     / \                / \
+    L   C              C   R
+    */
+    Node* b = a->left;
+    if (b == nullptr)
+    {
+        std::cout << "Something is wrong";
+        return;
+    }
+    Node* C = b->right;
 
+    a->left = C;
+    b->up = a->up;
+    if (a->up!=nullptr)
+    {
+        if(a->up->left == a)
+        {
+            a->up->left = b;
+        }
+        else
+        {
+            a->up->right = b;
+        }
+    }
+    a->up = b;
+    if (C!=nullptr)
+    {
+        C->up = a;
+    }
+    b->right = a;
+
+    fix_height(a);
+    fix_height(b);
+}
+
+void l_rotation(Node* a)
+{
+    /*
+        b              a
+       / \            / \
+      a   R   <-     L   b
+     / \                / \
+    L   C              C   R
+    */
+    Node* b = a->right;
+    if (b == nullptr)
+    {
+        std::cout << "Something is wrong";
+        return;
+    }
+    Node* C = b->left;
+    Node* R = b->right;
+    Node* L = a->left;
+    int b_v = b->value;
+    b->value = a->value;
+    a->value =b_v;
+
+    a->right = R;
+    a->left = b;
+    b->right = C;
+    b ->right = L;
+    if (L!=nullptr)
+    {
+        L->up = b;
+    }
+    if (C!=nullptr)
+    {
+        C->up = b;
+    }
+    if (R!=nullptr)
+    {
+        R->up = a;
+    }
+
+    fix_height(a);
+    fix_height(b);
+}
+
+/*
+void ll_rotation(Node* a)
+{
+    /*
+         a                   c
+        / \                 / \
+       /   \               /   \
+      L     b     ->      a     b
+           / \           / \   / \
+          c   R         L   M N   R
+         / \
+        M   N
+    *//*
+    Node* b = a->right;
+    if(b->left == nullptr)
+    {
+        std::cout << "Something is wrong";
+        return;
+    }
+    Node* c = b->left;
+    Node* M = c->left;
+    Node* N = c->right;
+
+    c->left = a;
+    c->right = b;
+    c->up = a->up;
+    a->up = c;
+    b->up = c;
+    a->left = M;
+    if (M != nullptr)
+    {
+        M->up = a;
+    }
+    b->left = N;
+    N->up = b;
+
+    fix_height(a);
+    fix_height(b);
+    fix_height(c);
+}
+
+void rr_rotation(Node* a)
+{
+    /*
+         a                   c
+        / \                 / \
+       /   \               /   \
+      b     R     ->      b     a
+     / \                 / \   / \
+    L   c               L   M N   R
+       / \
+      M   N
+    *//*
+    Node* b = a->left;
+    if(b->right == nullptr)
+    {
+        std::cout << "Something is wrong";
+        return;
+    }
+    Node* c = b->right;
+    Node* M = c->left;
+    Node* N = c->right;
+    int h = a->height;
+
+    c->up = a->up;
+    c->right = a;
+    c->left = b;
+    b->up = c;
+    a->up = c;
+    b->right = M;
+    M->up = b;
+    a->left = N;
+    N->up = a;
+
+    fix_height(a);
+    fix_height(b);
+    fix_height(c);
+}
+*/
+
+int count_delta(Node* a)
+{
+    int delta = a->right->height - a->left->height;
+}
+
+void balance_one(Node* a)
+{
+    fix_height(a);
+    int delta = count_delta(a);
+    if(delta==2)
+    {
+        if(count_delta(a->right) < 0)
+        {
+            r_rotation(a->right);
+        }
+        l_rotation(a);
+    }
+    if(delta == -2)
+    {
+        if (count_delta(a->left) > 0)
+        {
+            l_rotation(a->left);
+        }
+        r_rotation(a);
+    }
+}
+
+void balance_postorder(Node* n)
+{
+   if (n->right != nullptr)
+   {
+       balance_postorder(n->right);
+   }
+   if (n->left != nullptr)
+   {
+       balance_postorder(n->left);
+   }
+
+   balance_one(n);
+}
+
+void balance_trea(Tre* trea)
+{
+    bool finih = true;
+    while (finih)
+    {
+        int h = count_height(trea);
+        balance_postorder(trea->begin_node);
+        if (count_height(trea)==h)
+        {
+            finih = false;
+        }
+    }
 }
 
 
@@ -331,4 +581,11 @@ int main()
     Delete_value(tre, 6);
     preorder(tre->begin_node);
     std::cout << std::endl;
+    find_all_leaves(tre->begin_node);
+    std::cout << std::endl;
+
+    std::cout << std::endl;
+    std::cout << std::endl;
+    l_rotation(tre->begin_node);
+    preorder(tre->begin_node);
 }
